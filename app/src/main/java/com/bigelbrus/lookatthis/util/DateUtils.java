@@ -1,11 +1,13 @@
 package com.bigelbrus.lookatthis.util;
 
-import org.threeten.bp.LocalDate;
 import org.threeten.bp.LocalDateTime;
 import org.threeten.bp.format.DateTimeFormatter;
 import org.threeten.bp.format.DateTimeFormatterBuilder;
 
 public class DateUtils {
+
+    private DateUtils(){}
+
     private static DateTimeFormatter ddMMMMyyyHHMM = new DateTimeFormatterBuilder()
             .appendPattern("dd")
             .appendLiteral(' ')
@@ -16,13 +18,6 @@ public class DateUtils {
             .appendPattern("HH")
             .appendLiteral(':')
             .appendPattern("mm")
-            .toFormatter();
-    private static DateTimeFormatter ddMMyyyy = new DateTimeFormatterBuilder()
-            .appendPattern("dd")
-            .appendLiteral(' ')
-            .appendPattern("MM")
-            .appendLiteral(' ')
-            .appendPattern("yyyy")
             .toFormatter();
 
     public static String formatDate(LocalDateTime date) {

@@ -6,9 +6,6 @@ import android.os.Parcelable;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class CoverPhoto implements Parcelable {
 
     @SerializedName("id")
@@ -26,7 +23,7 @@ public class CoverPhoto implements Parcelable {
     @SerializedName("urls")
     @Expose
     private Urls urls;
-    public final static Parcelable.Creator<CoverPhoto> CREATOR = new Creator<CoverPhoto>() {
+    public static final Parcelable.Creator<CoverPhoto> CREATOR = new Creator<CoverPhoto>() {
 
 
         public CoverPhoto createFromParcel(Parcel in) {
@@ -46,10 +43,6 @@ public class CoverPhoto implements Parcelable {
     }
             ;
 
-    /**
-     * No args constructor for use in serialization
-     *
-     */
     public CoverPhoto() {
     }
 

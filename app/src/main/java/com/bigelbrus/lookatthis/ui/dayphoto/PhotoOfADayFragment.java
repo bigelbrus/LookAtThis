@@ -1,22 +1,17 @@
-package com.bigelbrus.lookatthis;
+package com.bigelbrus.lookatthis.ui.dayphoto;
 
 
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
-import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.vectordrawable.graphics.drawable.AnimationUtilsCompat;
 
-import android.preference.PreferenceManager;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -29,22 +24,17 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.bigelbrus.lookatthis.ui.details.PhotoDetailsFragment;
+import com.bigelbrus.lookatthis.R;
 import com.bigelbrus.lookatthis.api.Quality;
 import com.bigelbrus.lookatthis.api.Unsplash;
-import com.bigelbrus.lookatthis.data.DataRepository;
 import com.bigelbrus.lookatthis.models.Photo;
 import com.bigelbrus.lookatthis.util.AppUtils;
 import com.bigelbrus.lookatthis.util.DateUtils;
 import com.squareup.picasso.Picasso;
-import com.squareup.picasso.RequestCreator;
 
 import org.threeten.bp.LocalDateTime;
 import org.threeten.bp.ZoneId;
-
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.TimeZone;
 
 public class PhotoOfADayFragment extends Fragment {
     private static final String KEY_PHOTO_DATE = "PHOTO_DATE";
@@ -55,7 +45,7 @@ public class PhotoOfADayFragment extends Fragment {
     private static final String KEY_PHOTO_COLOR = "PHOTO_COLOR";
     private static final String DEFAULT_COLOR = "#6E633A";
     private static final String DEFAULT_LINK = "https://unsplash.com";
-    private static final int REGULAR_WIDTH = 1440;
+    private int imageWidth = 1440;
     private static final ZoneId ZONE_ID = ZoneId.of("+5");
 
     private ProgressBar photoLoading;
@@ -101,7 +91,6 @@ public class PhotoOfADayFragment extends Fragment {
         AppCompatActivity activity = (AppCompatActivity) getActivity();
         if (activity != null) {
             preferences = activity.getPreferences(Context.MODE_PRIVATE);
-//            preferences.edit().remove(KEY_PHOTO_DATE).apply();
             AppUtils.setActionBar(activity, view, R.string.photo_of_the_day, true);
         }
         if (preferences.contains(KEY_PHOTO_DATE)) {
@@ -208,15 +197,16 @@ public class PhotoOfADayFragment extends Fragment {
     }
 
     private void prepareImageView() {
-        photoOfTheDay.getLayoutParams().height = (height * REGULAR_WIDTH) / width;
-        photoOfTheDay.getLayoutParams().width = REGULAR_WIDTH;
+        photoOfTheDay.getLayoutParams().height = (height * imageWidth) / width;
+        photoOfTheDay.getLayoutParams().width = imageWidth;
         photoOfTheDay.setBackgroundColor(Color.parseColor(color));
     }
 
     private String getLinkToPhoto(Photo photo, Quality quality, Activity activity) {
         DisplayMetrics metrics = new DisplayMetrics();
         activity.getWindowManager().getDefaultDisplay().getMetrics(metrics);
-        String photoQualityAppend = "&fm=jpg&fit=crop&w=" + metrics.widthPixels + "&q=80&fit=max";
+        imageWidth = metrics.widthPixels;
+        String photoQualityAppend = "&fm=jpg&fit=crop&w=" + imageWidth + "&q=80&fit=max";
         switch (quality) {
             case RAW:
                 return photo.getUrls().getRaw();
@@ -230,8 +220,8 @@ public class PhotoOfADayFragment extends Fragment {
                 return photo.getUrls().getRegular();
             case TO_SCREEN_WIDTH:
             default:
-                StringBuilder stringBuilder = new StringBuilder(photo.getUrls().getRaw()).append(photoQualityAppend);
-                return stringBuilder.toString();
+                String stringBuilder = new StringBuilder(photo.getUrls().getRaw()).append(photoQualityAppend).toString();
+                return stringBuilder;
         }
     }
 

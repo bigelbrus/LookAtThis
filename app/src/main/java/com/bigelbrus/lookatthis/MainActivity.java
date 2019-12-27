@@ -3,21 +3,15 @@ package com.bigelbrus.lookatthis;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.TextView;
 
-import com.bigelbrus.lookatthis.api.Unsplash;
-import com.bigelbrus.lookatthis.models.Photo;
-import com.squareup.picasso.Picasso;
-import com.unsplash.pickerandroid.photopicker.UnsplashPhotoPicker;
-import com.unsplash.pickerandroid.photopicker.data.UnsplashPhoto;
-import com.unsplash.pickerandroid.photopicker.presentation.UnsplashPickerActivity;
+import com.bigelbrus.lookatthis.ui.collections.CollectionsFragment;
+import com.bigelbrus.lookatthis.ui.dayphoto.PhotoOfADayFragment;
+import com.bigelbrus.lookatthis.ui.search.SearchFragment;
 
 public class MainActivity extends AppCompatActivity {
     private static final String KEY_ACTIVE_BUTTON = "ACTIVE_BUTTON";
@@ -52,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
             case (R.id.search_button):
                 if (activeButton != searchButton) {
                     activateButton(searchButton);
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, SearchFragment.getInstance()).commit();
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, SearchFragment.newInstance()).commit();
                 }
                 break;
             case (R.id.picture_of_a_day_button):
@@ -64,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
             case (R.id.collections_button):
                 if (activeButton != collectionsButton) {
                     activateButton(collectionsButton);
-//                transaction.replace(R.id.fragment_container,CollectionsFragment.getInstance());
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, CollectionsFragment.newInstance()).commit();
                 }
                 break;
         }
@@ -82,7 +76,6 @@ public class MainActivity extends AppCompatActivity {
             findViewById(R.id.bottom_panel).setVisibility(View.VISIBLE);
             onBackPressed();
         }
-        invalidateOptionsMenu();
         return super.onOptionsItemSelected(item);
     }
 

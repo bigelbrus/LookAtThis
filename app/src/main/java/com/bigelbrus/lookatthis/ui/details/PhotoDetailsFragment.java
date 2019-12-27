@@ -1,8 +1,7 @@
-package com.bigelbrus.lookatthis;
+package com.bigelbrus.lookatthis.ui.details;
 
 
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
@@ -17,27 +16,20 @@ import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.UnderlineSpan;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.appcompat.widget.Toolbar;
-
-import com.bigelbrus.lookatthis.data.DataRepository;
-import com.bigelbrus.lookatthis.models.Photo;
+import com.bigelbrus.lookatthis.R;
 import com.bigelbrus.lookatthis.util.AppUtils;
 import com.squareup.picasso.Picasso;
 
 
-/**
- * A simple {@link Fragment} subclass.
- */
+
 public class PhotoDetailsFragment extends Fragment {
     private static final String KEY_COLOR = "COLOR";
     private static final String KEY_WIDTH = "WIDTH";
@@ -55,10 +47,8 @@ public class PhotoDetailsFragment extends Fragment {
 
     public static PhotoDetailsFragment getInstance(
             Integer width, Integer height, String description, String link, String color
-//            Photo photo
     ) {
         Bundle args = new Bundle();
-//        args.putParcelable(KEY_PHOTO,photo);
         args.putString(KEY_COLOR, color);
         args.putInt(KEY_WIDTH, width);
         args.putInt(KEY_HEIGHT, height);
@@ -78,7 +68,6 @@ public class PhotoDetailsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_photo_details, container, false);
         TextView linkToGoodQualityImage = view.findViewById(R.id.tv_link);
         getActivity().findViewById(R.id.bottom_panel).setVisibility(View.GONE);

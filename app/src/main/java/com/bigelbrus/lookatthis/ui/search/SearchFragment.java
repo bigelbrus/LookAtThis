@@ -1,4 +1,4 @@
-package com.bigelbrus.lookatthis;
+package com.bigelbrus.lookatthis.ui.search;
 
 
 import android.content.Context;
@@ -17,14 +17,12 @@ import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.bigelbrus.lookatthis.api.Orientation;
+import com.bigelbrus.lookatthis.PaginationScrollListener;
+import com.bigelbrus.lookatthis.R;
 import com.bigelbrus.lookatthis.api.Unsplash;
 import com.bigelbrus.lookatthis.models.SearchResults;
 
 
-/**
- * A simple {@link Fragment} subclass.
- */
 public class SearchFragment extends Fragment {
     private static final String KEY_SEARCH_TAG = "SEARCH_TAG";
     private RecyclerView searchRecyclerView;
@@ -34,11 +32,18 @@ public class SearchFragment extends Fragment {
     private ProgressBar loadingProgressBar;
     private SearchPhotosAdapter adapter;
     private SharedPreferences preferences;
+    private StaggeredGridLayoutManager layoutManager;
 
-    private static final int SPAN_COUNT = 3;
+    private static final int PAGE_START = 1;
+    private boolean isLoading;
+    private boolean isLastPage;
+    private int totalPages;
+    private int currentPage = PAGE_START;
+
+    public static final int SPAN_COUNT = 3;
 
 
-    public static SearchFragment getInstance() {
+    public static SearchFragment newInstance() {
         return new SearchFragment();
     }
 
@@ -46,17 +51,20 @@ public class SearchFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_search, container, false);
         searchRecyclerView = view.findViewById(R.id.rv_search);
         searchField = view.findViewById(R.id.search_field_edit_text);
         makeSearchButton = view.findViewById(R.id.make_search_button);
         messageText = view.findViewById(R.id.search_message_text);
         loadingProgressBar = view.findViewById(R.id.search_progress_bar);
-        preferences = getActivity().getPreferences(Context.MODE_PRIVATE);
+        if (getActivity() != null) {
+            preferences = getActivity().getPreferences(Context.MODE_PRIVATE);
+        }
+        layoutManager = new StaggeredGridLayoutManager(SPAN_COUNT,StaggeredGridLayoutManager.VERTICAL);
         adapter = new SearchPhotosAdapter(getFragmentManager());
         searchRecyclerView.setAdapter(adapter);
-        searchRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(SPAN_COUNT, StaggeredGridLayoutManager.VERTICAL));
+        searchRecyclerView.setLayoutManager(layoutManager);
+
         showLoading();
         searchField.setText(preferences.getString(KEY_SEARCH_TAG, ""));
         makeSearch();
@@ -67,23 +75,30 @@ public class SearchFragment extends Fragment {
         return view;
     }
 
-    private void makeSearch() {
+    private void loadFirstPage() {
         if (searchField.getText().toString().equals("")) {
             showMessage();
             messageText.setText(getString(R.string.empty_search));
         } else {
             preferences.edit().putString(KEY_SEARCH_TAG, searchField.getText().toString()).apply();
-            Unsplash.getInstance().searchPhotos(searchField.getText().toString(), new Unsplash.OnSearchCompleteListener() {
+            Unsplash.getInstance().searchPhotos(searchField.getText().toString(),currentPage, new Unsplash.OnSearchCompleteListener() {
                 @Override
-                public void onComplete(SearchResults results, String link) {
+                public void onComplete(SearchResults results) {
                     if (results.getResults().isEmpty()) {
                         messageText.setText(getActivity().getText(R.string.no_result));
                         showMessage();
                     } else {
-                        adapter.setAdapter(results.getResults());
+                        adapter.clear();
+                        adapter.addAll(results.getResults());
+                        totalPages = results.getTotalPages();
+                        currentPage = PAGE_START;
+                        if (currentPage <= totalPages) {
+                            adapter.addLoadingFooter();
+                        } else {
+                            isLastPage = true;
+                        }
                         showData();
                     }
-
                 }
 
                 @Override
@@ -93,6 +108,63 @@ public class SearchFragment extends Fragment {
                 }
             });
         }
+    }
+
+    private void loadNextPage() {
+        Unsplash.getInstance().searchPhotos(searchField.getText().toString(), currentPage, new Unsplash.OnSearchCompleteListener() {
+            @Override
+            public void onComplete(SearchResults results) {
+                if (results.getResults().isEmpty()) {
+                    messageText.setText(getActivity().getText(R.string.no_result));
+                    showMessage();
+                    totalPages = results.getTotalPages();
+                } else {
+                    adapter.removeLoadingFooter();
+                    isLoading = false;
+                    adapter.addAll(results.getResults());
+                    if (currentPage != totalPages) {
+                        adapter.addLoadingFooter();
+                    } else {
+                        isLastPage = true;
+                    }
+                    showData();
+                }
+
+            }
+
+            @Override
+            public void onError(String error) {
+                showMessage();
+                messageText.setText(error);
+            }
+        });
+    }
+
+    private void makeSearch() {
+        loadFirstPage();
+        searchRecyclerView.addOnScrollListener(new PaginationScrollListener(layoutManager) {
+            @Override
+            protected void loadMoreItems() {
+                isLoading = true;
+                currentPage++;
+                loadNextPage();
+            }
+
+            @Override
+            public int getTotalPageCount() {
+                return totalPages;
+            }
+
+            @Override
+            public boolean isLastPage() {
+                return isLastPage;
+            }
+
+            @Override
+            public boolean isLoading() {
+                return isLoading;
+            }
+        });
 
     }
 

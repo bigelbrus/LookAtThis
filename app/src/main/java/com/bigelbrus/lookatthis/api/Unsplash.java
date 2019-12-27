@@ -21,7 +21,6 @@ public class Unsplash {
     private static final String BASE_URL = "https://api.unsplash.com/";
     private static final String CLIENT_ID = "5bf61d94923089996e743459063eb478370731d7280a703d6a9952870a4a85f3";
     private static final Integer PER_PAGE = 30;
-//    private static final String Secret_ID = "30d598382eb4cecc875f8d4400860170a671317350a6f399fb644d429270f98e";
     private static Unsplash mInstance;
 
     private PhotoEndpoints photoApi;
@@ -36,7 +35,7 @@ public class Unsplash {
         return mInstance;
     }
 
-    private Unsplash (String clientId) {
+    private Unsplash(String clientId) {
         OkHttpClient client = new OkHttpClient.Builder()
                 .addInterceptor(new HeaderInterceptor(clientId))
                 .build();
@@ -51,19 +50,19 @@ public class Unsplash {
         collectionApi = retrofit.create(CollectionEndpoints.class);
     }
 
-    public void getPhotos(Integer page, Integer perPage, Order order,final OnPhotosLoadedListener listener) {
-        Call<List<Photo>> call = photoApi.getPhotos(page,perPage,order.getOrder());
+    public void getPhotos(Integer page, Integer perPage, Order order, final OnPhotosLoadedListener listener) {
+        Call<List<Photo>> call = photoApi.getPhotos(page, perPage, order.getOrder());
         call.enqueue(getMultiplePhotoCallback(listener));
     }
 
-    public void getPhoto(String id,final OnPhotoLoadedListener listener) {
+    public void getPhoto(String id, final OnPhotoLoadedListener listener) {
         Call<Photo> call = photoApi.getPhoto(id);
-        Log.d(TAG,"getPhoto" + call.toString());
+        Log.d(TAG, "getPhoto" + call.toString());
         call.enqueue(getSinglePhotoCallback(listener));
     }
 
-    public void getRandomPortraitPhoto (OnPhotoLoadedListener listener) {
-        getRandomPhoto(Orientation.PORTRAIT,listener);
+    public void getRandomPortraitPhoto(OnPhotoLoadedListener listener) {
+        getRandomPhoto(Orientation.PORTRAIT, listener);
     }
 
     public void getRandomPhoto(Orientation orientation, OnPhotoLoadedListener listener) {
@@ -71,17 +70,27 @@ public class Unsplash {
         call.enqueue(getSinglePhotoCallback(listener));
     }
 
-    public void searchPhotos(String query,Integer page, Integer perPage, Orientation orientation,OnSearchCompleteListener listener) {
-        Call<SearchResults> call = photoApi.searchPhotos(query,page,perPage,orientation.getOrientation());
+    public void searchPhotos(String query, Integer page, Integer perPage, Orientation orientation, OnSearchCompleteListener listener) {
+        Call<SearchResults> call = photoApi.searchPhotos(query, page, perPage, orientation.getOrientation());
         call.enqueue(getSearchResultsCallback(listener));
     }
 
-    public void searchPhotos(String query,OnSearchCompleteListener listener) {
-        searchPhotos(query,1,PER_PAGE, Orientation.PORTRAIT,listener);
+    public void searchPhotos(String query, OnSearchCompleteListener listener) {
+        searchPhotos(query, 1, PER_PAGE, Orientation.PORTRAIT, listener);
     }
 
     public void searchPhotos(String query, Integer page, OnSearchCompleteListener listener) {
-        searchPhotos(query,page,PER_PAGE, Orientation.PORTRAIT,listener);
+        searchPhotos(query, page, PER_PAGE, Orientation.PORTRAIT, listener);
+    }
+
+    public void getCollections(Integer page, Integer perPage, OnCollectionsLoadedListener listener) {
+        Call<List<Collection>> call = collectionApi.getCollections(page, perPage);
+        call.enqueue(getMultipleCollectionCallback(listener));
+    }
+
+    public void getCollectionsPhoto(String id, Integer page, Integer perPage, OnPhotosLoadedListener listener) {
+        Call<List<Photo>> call = collectionApi.getCollectionPhotos(id,page,perPage);
+        call.enqueue(getMultiplePhotoCallback(listener));
     }
 
     public interface OnPhotoLoadedListener {
@@ -97,7 +106,7 @@ public class Unsplash {
     }
 
     public interface OnCollectionsLoadedListener {
-        void onComplete(List<Collection> collections);
+        void onComplete(List<Collection> collections, boolean hasNext);
 
         void onError(String error);
     }
@@ -109,23 +118,42 @@ public class Unsplash {
     }
 
     public interface OnSearchCompleteListener {
-        void onComplete(SearchResults results,String next);
+        void onComplete(SearchResults results);
 
         void onError(String error);
     }
 
-    private Callback<Photo> getSinglePhotoCallback (final OnPhotoLoadedListener listener) {
+    private Callback<Photo> getSinglePhotoCallback(final OnPhotoLoadedListener listener) {
         return new UnsplashCallback<Photo>() {
             @Override
-            void onComplete(Photo response,String link) {
+            void onComplete(Photo response) {
                 listener.onComplete(response);
-                Log.d(TAG,"onComplete");
+                Log.d(TAG, "onComplete");
             }
 
             @Override
             void onError(Call<Photo> call, String message) {
                 listener.onError(message);
-                Log.d(TAG,"onError " + message);
+                Log.d(TAG, "onError " + message);
+
+            }
+        };
+    }
+
+    private Callback<List<Collection>> getMultipleCollectionCallback(final OnCollectionsLoadedListener listener) {
+        return new UnsplashCollectionCallback<List<Collection>>() {
+            @Override
+            void onComplete(List<Collection> response, boolean hasNext) {
+                listener.onComplete(response, hasNext);
+            }
+
+            @Override
+            void onComplete(List<Collection> response) {
+
+            }
+
+            @Override
+            void onError(Call<List<Collection>> call, String message) {
 
             }
         };
@@ -134,7 +162,7 @@ public class Unsplash {
     private Callback<List<Photo>> getMultiplePhotoCallback(final OnPhotosLoadedListener listener) {
         return new UnsplashCallback<List<Photo>>() {
             @Override
-            void onComplete(List<Photo> response,String link) {
+            void onComplete(List<Photo> response) {
                 listener.onComplete(response);
             }
 
@@ -148,8 +176,8 @@ public class Unsplash {
     private Callback<SearchResults> getSearchResultsCallback(final OnSearchCompleteListener listener) {
         return new UnsplashCallback<SearchResults>() {
             @Override
-            void onComplete(SearchResults response, String link) {
-                listener.onComplete(response,link);
+            void onComplete(SearchResults response) {
+                listener.onComplete(response);
             }
 
             @Override
@@ -160,21 +188,19 @@ public class Unsplash {
     }
 
     private abstract class UnsplashCallback<T> implements Callback<T> {
-        abstract void onComplete(T response,String next);
+        abstract void onComplete(T response);
 
         abstract void onError(Call<T> call, String message);
 
         @Override
         public void onResponse(Call<T> call, Response<T> response) {
             int statusCode = response.code();
-            String header = response.headers().get("link");
-            Log.d("tag",(header == null)?"":header);
             if (statusCode == 200) {
-                onComplete(response.body(),header);
+                onComplete(response.body());
             } else if (statusCode >= 400) {
-                onError(call,String.valueOf(statusCode));
+                onError(call, String.valueOf(statusCode));
                 if (statusCode == 401) {
-                    Log.d(TAG,"Unauthorized, Check your client Id");
+                    Log.d(TAG, "Unauthorized, Check your client Id");
                 }
             }
         }
@@ -184,5 +210,27 @@ public class Unsplash {
             onError(call, t.getMessage());
         }
 
+    }
+
+    private abstract class UnsplashCollectionCallback<T> extends UnsplashCallback<T> {
+        abstract void onComplete(T responce, boolean hasNext);
+
+        @Override
+        public void onResponse(Call<T> call, Response<T> response) {
+            int statusCode = response.code();
+            boolean hasNext = false;
+            String links = response.headers().get("link");
+            if ( links != null) {
+                hasNext = links.contains("next");
+            }
+            if (statusCode == 200) {
+                onComplete(response.body(), hasNext);
+            } else if (statusCode >= 400) {
+                onError(call, String.valueOf(statusCode));
+                if (statusCode == 401) {
+                    Log.d(TAG, "Unauthorized, Check your client Id");
+                }
+            }
+        }
     }
 }
