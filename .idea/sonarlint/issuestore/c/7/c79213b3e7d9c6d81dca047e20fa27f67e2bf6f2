@@ -1,0 +1,6 @@
+
+’squid:UselessImportCheck"gRemove this unused import 'com.unsplash.pickerandroid.photopicker.presentation.UnsplashPickerActivity'.(’Ş8ì—Ôœó-
+dsquid:UselessImportCheck"4Remove this unused import 'android.widget.TextView'.(„Ë‚ˆÿÿÿÿÿ8Éàœó-
+squid:UselessImportCheck"WRemove this unused import 'com.unsplash.pickerandroid.photopicker.UnsplashPhotoPicker'.(ŞÏÈm8ğ·”ó-
+squid:UselessImportCheck"VRemove this unused import 'com.unsplash.pickerandroid.photopicker.data.UnsplashPhoto'.(Œ‹¾Û8ğ·”ó-
+¤squid:S1186""€Add a nested comment explaining why this method is empty, throw an UnsupportedOperationException or complete the implementation.(®ºÊáşÿÿÿÿ8»Öœó-

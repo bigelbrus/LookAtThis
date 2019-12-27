@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="BottomButton.V23" parent="BottomButtonWithoutTint">
+        <item name="android:drawableTint">@drawable/selector_bottom_button</item>
+    </style>
+
+    <style name="BottomButton" parent="BottomButton.V23"/>
+</resources>

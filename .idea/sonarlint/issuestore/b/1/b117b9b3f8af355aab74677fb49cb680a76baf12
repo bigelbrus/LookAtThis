@@ -1,0 +1,4 @@
+
+Tsquid:S1068"1Remove this unused "collectionApi" private field.(ÄÜŠúÿÿÿÿÿ8©ø®›ó-
+Dsquid:S1170"!Make this final field static too.(üâ½Åýÿÿÿÿ8Œõîœó-
+rsquid:S00116"NRename this field "TAG" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(üâ½Åýÿÿÿÿ8®Ïžœó-

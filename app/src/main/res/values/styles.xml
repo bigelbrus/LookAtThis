@@ -1,0 +1,81 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <style name="BottomButtonWithoutTint" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">@dimen/height_bottom_panel</item>
+        <item name="android:background">@android:color/white</item>
+        <item name="android:textAppearance">@style/BottomButtonTextAppearance</item>
+        <item name="android:textColor">@drawable/selector_bottom_button</item>
+    </style>
+
+    <style name="BottomButton" parent="BottomButtonWithoutTint"/>
+
+    <style name="DividerHorizontal">
+        <item name="android:layout_height">@dimen/divider_height</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:background">@color/black__38</item>
+    </style>
+
+    <style name="DividerVertical">
+        <item name="android:layout_height">0dp</item>
+        <item name="android:layout_width">@dimen/divider_width</item>
+        <item name="android:background">@color/black__38</item>
+    </style>
+
+    <style name="BottomButtonTextAppearance">
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="ToolbarTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorControlNormal">@color/primaryTextColor</item>
+        <item name="android:background">@color/colorPrimary</item>
+    </style>
+
+    <style name="ToolbarTitleTextAppearance">
+        <item name="android:gravity">center_horizontal</item>
+        <item name="android:textSize">21sp</item>
+        <item name="android:textColor">@color/primaryTextColor</item>
+        <item name="android:fadingEdgeLength">26sp</item>
+        <item name="android:inputType">text</item>
+        <item name="android:ellipsize">none</item>
+        <item name="android:fontFamily">@font/roboto</item>
+        <item name="android:requiresFadingEdge">horizontal</item>
+        <item name="android:maxLines">1</item>
+    </style>
+
+    <style name="ProgressBar" parent="Theme.AppCompat.Light">
+        <item name="android:colorAccent">@color/black__38</item>
+    </style>
+
+    <style name="TextAppearanceMedium" parent="TextAppearance.AppCompat.Medium">
+        <item name="android:fontFamily">@font/roboto</item>
+    </style>
+
+
+    <style name="DetailsLabelTextAppearance" parent="TextAppearanceMedium"/>
+
+    <style name="DetailsInfoTextAppearance" parent="TextAppearanceMedium">
+        <item name="android:textColor">@color/black__87</item>
+    </style>
+
+    <style name="SearchEditText" parent="Widget.AppCompat.EditText">
+        <item name="android:textColorHint">@color/black__38</item>
+        <item name="android:textColor">@color/black__87</item>
+        <item name="android:textSize">@dimen/text_size_medium</item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:textCursorDrawable">@color/black__87</item>
+    </style>
+
+    <dimen name="height_bottom_panel">70dp</dimen>
+    <dimen name="divider_width">1dp</dimen>
+    <dimen name="divider_height">1dp</dimen>
+</resources>

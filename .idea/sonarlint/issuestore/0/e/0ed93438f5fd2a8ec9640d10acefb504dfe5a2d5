@@ -1,0 +1,6 @@
+
+[squid:UselessImportCheck
+"+Remove this unused import 'java.util.List'.(Õë±Äøÿÿÿÿ8å£›ó-
+qsquid:ModifiersOrderCheck"EReorder the modifiers to comply with the Java Language Specification.(”„‡ò8²Ş›ó-
+[squid:UselessImportCheck	"0Remove this unused import 'java.util.ArrayList'.(÷‰îƒ8ĞÌŸ›ó-
+…squid:S4165G"bRemove this useless assignment; "urls" already holds the assigned value along all execution paths.(µ™º§ùÿÿÿÿ8ûª¡›ó-

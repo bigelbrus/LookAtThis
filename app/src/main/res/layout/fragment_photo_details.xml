@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorAccent"
+    tools:context=".PhotoDetailsFragment">
+
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+
+            <ImageView
+                android:id="@+id/iv_photo_details"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:scaleType="center"
+                android:layout_margin="@dimen/spacing_medium"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:src="@drawable/ic_photo_black_24dp" />
+
+            <TextView
+                android:id="@+id/dimensions_label"
+                style="@style/DetailsLabelTextAppearance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/spacing_small"
+                android:layout_marginTop="@dimen/spacing_medium"
+                android:text="@string/dimensions"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/iv_photo_details" />
+
+            <TextView
+                android:id="@+id/iv_width"
+                style="@style/DetailsInfoTextAppearance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="@id/dimensions_label"
+                app:layout_constraintTop_toBottomOf="@+id/dimensions_label"
+                tools:text="1000" />
+
+
+            <TextView
+                android:id="@+id/xLabel"
+                style="@style/DetailsInfoTextAppearance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/x"
+                android:layout_marginStart="@dimen/spacing_small"
+                app:layout_constraintBottom_toTopOf="@+id/iv_width"
+                app:layout_constraintStart_toEndOf="@+id/iv_width"
+                app:layout_constraintTop_toBottomOf="@+id/iv_width" />
+
+            <TextView
+                android:id="@+id/iv_height"
+                style="@style/DetailsInfoTextAppearance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/spacing_small"
+                app:layout_constraintBaseline_toBaselineOf="@id/iv_width"
+                app:layout_constraintStart_toEndOf="@+id/xLabel"
+                tools:text="1000" />
+
+            <TextView
+                android:id="@+id/description_label"
+                style="@style/DetailsLabelTextAppearance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/spacing_small"
+                android:layout_marginTop="@dimen/spacing_medium"
+                android:text="@string/description"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/iv_width" />
+
+            <TextView
+                android:id="@+id/iv_description"
+                style="@style/DetailsInfoTextAppearance"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_medium"
+                android:layout_margin="@dimen/spacing_small"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/description_label"
+                tools:text="description description description description description description
+description description description description
+description description description description " />
+
+            <TextView
+                android:id="@+id/tv_link"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginBottom="@dimen/spacing_medium"
+                android:layout_marginStart="@dimen/spacing_medium"
+                android:text="@string/link_to_good_quality"
+                android:layout_marginTop="@dimen/spacing_large"
+                app:layout_constraintTop_toBottomOf="@+id/iv_description" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

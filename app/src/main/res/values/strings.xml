@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">Look At This!</string>
+    <string name="search_photos">Search photos</string>
+    <string name="photo_of_the_day">Photo of the day</string>
+    <string name="collections">Collections</string>
+
+    <string name="error">Error! Something going wrong</string>
+    <string name="dimensions">Dimensions</string>
+    <string name="height">Height\u003A</string>
+    <string name="x" translatable="false">×</string>
+    <string name="description">Description</string>
+    <string name="details">Details</string>
+    <string name="link_to_good_quality">Open full size image in browser</string>
+    <string name="search_button">Search button</string>
+    <string name="enter_image_tag">Enter search tag</string>
+    <string name="empty_search">Empty search field</string>
+    <string name="refresh">Refresh</string>
+</resources>
